@@ -1,0 +1,14 @@
+- hosts: server
+  tasks:
+    - name: Copiar docker-compose
+      copy:
+        src: ../docker/docker-compose.yml
+        dest: /home/ubuntu/docker-compose.yml
+
+    - name: Descargar imagen del registry
+      command: docker pull ghcr.io/tuusuario/api-laravel:latest
+
+    - name: Levantar contenedores
+      command: docker-compose up -d
+      args:
+        chdir: /home/ubuntu
