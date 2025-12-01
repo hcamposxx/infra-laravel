@@ -1,0 +1,27 @@
+name: Deploy API Laravel
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout infra repo
+        uses: actions/checkout@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_PAT }}
+
+      - name: Pull API Laravel image
+        run: |
+          docker pull ghcr.io/hcamposxx/api-laravel:latest
+
+      - name: Deploy with Docker Compose
+        run: |
+          docker compose -f docker.compose.yml up -d
